@@ -1,0 +1,4 @@
+rootProject.name = "Meet Rick and Morty"
+include ':app'
+include ':domain'
+include ':data'

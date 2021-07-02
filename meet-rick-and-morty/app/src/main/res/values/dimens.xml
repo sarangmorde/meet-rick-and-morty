@@ -1,0 +1,12 @@
+<resources>
+    <dimen name="dimen_common_zero">0dp</dimen>
+    <dimen name="dimen_common_xsmall">5dp</dimen>
+    <dimen name="dimen_common_small">10dp</dimen>
+    <dimen name="dimen_common_medium">15dp</dimen>
+    <dimen name="dimen_common_large">20dp</dimen>
+    <dimen name="dimen_common_xlarge">25dp</dimen>
+    <dimen name="dimen_common_xxlarge">30dp</dimen>
+
+    <!-- Character Details -->
+    <dimen name="height_character_details_image">300dp</dimen>
+</resources>

@@ -1,0 +1,79 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'kotlin-parcelize'
+}
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+
+        buildConfigField "String", "BASE_URL", "\"https://rickandmortyapi.com/api/\""
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+        freeCompilerArgs = ["-Xallow-result-return-type"]
+    }
+    kapt {
+        correctErrorTypes = true
+    }
+}
+
+dependencies {
+
+    api project(":domain")
+
+    implementation commonDependencies.kotlin
+    implementation commonDependencies.ktx
+    implementation commonDependencies.appcompat
+
+    //retrofit
+    implementation commonDependencies.retrofit
+    implementation commonDependencies.retrofitGson
+    implementation commonDependencies.okhttp
+
+    // GSON
+    api commonDependencies.gson
+
+    //    ======= Room
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+
+    // Tests
+    testImplementation testDependencies.junit
+    testImplementation testDependencies.mockito
+    testImplementation testDependencies.mockitoInline
+    testImplementation testDependencies.mockitoKotlin
+    testImplementation testDependencies.archCoreTesting
+    testImplementation testDependencies.coroutineTest
+
+    androidTestImplementation androidTestDependencies.junitExtKtx
+    androidTestImplementation androidTestDependencies.robolectric
+    androidTestImplementation androidTestDependencies.testRunner
+    androidTestImplementation androidTestDependencies.rules
+    androidTestImplementation androidTestDependencies.junitExt
+    androidTestImplementation androidTestDependencies.espresso
+    androidTestImplementation androidTestDependencies.espressoCore
+}

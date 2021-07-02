@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="character"
+            type="com.meetrickandmorty.domain.model.Character" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dimen_common_xsmall"
+        app:cardCornerRadius="@dimen/dimen_common_xsmall"
+        app:cardElevation="@dimen/dimen_common_xsmall">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imgCharacters"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:transitionName="@string/character_image_transition_name"
+                app:characterImage="@{character.image}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/ic_rick_and_morty" />
+
+            <TextView
+                android:id="@+id/tvCharacterTitle"
+                style="@style/Text.Medium.Shadow"
+                android:layout_width="@dimen/dimen_common_zero"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dimen_common_xsmall"
+                android:layout_marginBottom="@dimen/dimen_common_xsmall"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="2"
+                android:text="@{character.name}"
+                app:layout_constraintBottom_toBottomOf="@+id/imgCharacters"
+                app:layout_constraintEnd_toEndOf="@id/imgCharacters"
+                app:layout_constraintStart_toStartOf="@id/imgCharacters"
+                tools:text="Rick Sanchez" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

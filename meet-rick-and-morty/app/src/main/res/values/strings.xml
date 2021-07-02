@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Meet Rick and Morty</string>
+
+    <string name="lbl_error_msg">Error..</string>
+    <string name="lbl_internet_title">Network Error</string>
+    <string name="lbl_no_data">No quick filter found. Please try again later</string>
+    <string name="lbl_ok">OK</string>
+    <string name="lbl_msg_no_internet_connection">"No internet connection found. Please connect to internet and try again."</string>
+
+    <!-- Character Details -->
+    <string name="text_character_details_name">Name:</string>
+    <string name="text_character_details_gender">Gender:</string>
+    <string name="text_character_details_origin">Origin:</string>
+    <string name="text_character_details_species">Species:</string>
+    <string name="text_character_details_type">Type:</string>
+    <string name="text_character_details_status">Status:</string>
+    <string name="text_character_details_created">Created:</string>
+    <string name="text_character_details_location">Location:</string>
+
+    <string name="character_image_transition_name">character_image</string>
+    <string name="menu_search">Search</string>
+
+</resources>
