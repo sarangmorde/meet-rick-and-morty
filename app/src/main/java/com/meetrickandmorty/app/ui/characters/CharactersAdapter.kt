@@ -29,12 +29,12 @@ class CharactersAdapter(
 
     override fun getItemCount(): Int = characters.size
 
-    fun setCharactersData(characters: List<Character>) {
+    fun setCharactersData(characters: List<Character>, isFiltering: Boolean = false) {
         this.characters.run {
             val position = size
             clearData()
             addAll(characters)
-            if (position > characters.size) {
+            if (position > characters.size || isFiltering) {
                 notifyDataSetChanged()
             } else {
                 notifyItemRangeChanged(position, characters.size)

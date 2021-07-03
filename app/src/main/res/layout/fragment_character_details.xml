@@ -25,10 +25,10 @@
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline"
-                app:layout_constraintGuide_percent="0.3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"/>
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.3" />
 
             <ImageView
                 android:id="@+id/ivCharacter"
@@ -55,13 +55,13 @@
 
             <TextView
                 android:id="@+id/tvNameValue"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:layout_width="wrap_content"
+                style="@style/Text.Medium.Bold"
+                android:layout_width="@dimen/dimen_common_zero"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/dimen_common_small"
                 android:layout_marginVertical="@dimen/dimen_common_small"
                 android:text="@{character.name}"
-                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/guideline"
                 app:layout_constraintTop_toBottomOf="@id/ivCharacter" />
 
@@ -80,13 +80,13 @@
 
             <TextView
                 android:id="@+id/tvGenderValue"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:layout_width="wrap_content"
+                style="@style/Text.Medium.Bold"
+                android:layout_width="@dimen/dimen_common_zero"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/dimen_common_small"
                 android:layout_marginVertical="@dimen/dimen_common_small"
                 android:text="@{character.gender}"
-                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/guideline"
                 app:layout_constraintTop_toBottomOf="@id/tvNameValue" />
 
@@ -105,13 +105,13 @@
 
             <TextView
                 android:id="@+id/tvOriginValue"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:layout_width="wrap_content"
+                style="@style/Text.Medium.Bold"
+                android:layout_width="@dimen/dimen_common_zero"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/dimen_common_small"
                 android:layout_marginVertical="@dimen/dimen_common_small"
                 android:text="@{character.origin.name}"
-                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/guideline"
                 app:layout_constraintTop_toBottomOf="@id/tvGenderValue" />
 
@@ -130,13 +130,13 @@
 
             <TextView
                 android:id="@+id/tvSpeciesValue"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:layout_width="wrap_content"
+                style="@style/Text.Medium.Bold"
+                android:layout_width="@dimen/dimen_common_zero"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/dimen_common_small"
                 android:layout_marginVertical="@dimen/dimen_common_small"
                 android:text="@{character.species}"
-                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/guideline"
                 app:layout_constraintTop_toBottomOf="@id/tvOriginValue" />
 
@@ -155,13 +155,13 @@
 
             <TextView
                 android:id="@+id/tvLocationValue"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:layout_width="wrap_content"
+                style="@style/Text.Medium.Bold"
+                android:layout_width="@dimen/dimen_common_zero"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/dimen_common_small"
                 android:layout_marginVertical="@dimen/dimen_common_small"
                 android:text="@{character.location.name}"
-                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/guideline"
                 app:layout_constraintTop_toBottomOf="@id/tvSpeciesValue" />
 
@@ -180,13 +180,13 @@
 
             <TextView
                 android:id="@+id/tvStatusValue"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:layout_width="wrap_content"
+                style="@style/Text.Medium.Bold"
+                android:layout_width="@dimen/dimen_common_zero"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/dimen_common_small"
                 android:layout_marginVertical="@dimen/dimen_common_small"
                 android:text="@{character.status}"
-                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/guideline"
                 app:layout_constraintTop_toBottomOf="@id/tvLocationValue" />
 
@@ -205,13 +205,13 @@
 
             <TextView
                 android:id="@+id/tvTypeValue"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:layout_width="wrap_content"
+                style="@style/Text.Medium.Bold"
+                android:layout_width="@dimen/dimen_common_zero"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/dimen_common_small"
                 android:layout_marginVertical="@dimen/dimen_common_small"
                 android:text="@{character.type}"
-                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/guideline"
                 app:layout_constraintTop_toBottomOf="@id/tvStatusValue" />
 
@@ -230,13 +230,13 @@
 
             <TextView
                 android:id="@+id/tvCreatedValue"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:layout_width="wrap_content"
+                style="@style/Text.Medium.Bold"
+                android:layout_width="@dimen/dimen_common_zero"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/dimen_common_small"
                 android:layout_marginVertical="@dimen/dimen_common_small"
                 android:text="@{character.created}"
-                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/guideline"
                 app:layout_constraintTop_toBottomOf="@id/tvTypeValue" />
         </androidx.constraintlayout.widget.ConstraintLayout>

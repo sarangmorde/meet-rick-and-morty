@@ -18,9 +18,6 @@ val repositoryModule = module {
 }
 
 val sourceModule = module {
-//    single<LoginDataSource> { LoginDataSourceImpl(mapper = get(), userDao = get()) }
-//    single<OfferDataSource> { OfferDataSourceImpl(offersMapper = get(), offersDao = get()) }
-
     single<RickAndMortyRemoteSource> {
         RickAndMortyRemoteSourceImpl(api = get(), mapper = get())
     }

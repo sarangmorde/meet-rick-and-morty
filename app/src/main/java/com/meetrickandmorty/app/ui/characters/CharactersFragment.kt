@@ -29,6 +29,7 @@ class CharactersFragment : BaseFragment() {
 
     private var listScrollPosition: Int = 0
     private var isNavigatingBack: Boolean = false
+    private var isFilteringCharacters = false
     private var nextPage = 1
     private var info: InfoModel? = null
 
@@ -126,7 +127,7 @@ class CharactersFragment : BaseFragment() {
     }
 
     private fun setCharactersData(characters: List<Character>) {
-        charactersAdapter.setCharactersData(characters)
+        charactersAdapter.setCharactersData(characters, isFilteringCharacters)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -136,6 +137,7 @@ class CharactersFragment : BaseFragment() {
         val searchView: SearchView = searchViewItem.actionView as SearchView
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
+                isFilteringCharacters = true
                 searchView.clearFocus()
                 viewModel.filterCharacters(query)
                 return false
@@ -146,6 +148,7 @@ class CharactersFragment : BaseFragment() {
             }
         })
         searchView.setOnCloseListener {
+            isFilteringCharacters = false
             charactersAdapter.clearData()
             viewModel.filterCharacters(null)
             return@setOnCloseListener false
