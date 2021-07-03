@@ -8,7 +8,7 @@ class RickAndMortyRepositoryImpl(
     private val remoteSource: RickAndMortyRemoteSource
 ) : RickAndMortyRepository {
 
-    override suspend fun getAllCharacters(offset: Int): Result<CharactersPagination> {
-        return remoteSource.getAllCharacters(offset)
+    override suspend fun getAllCharacters(offset: Int, name: String): Result<CharactersPagination> {
+        return remoteSource.getAllCharacters(offset, name)
     }
 }

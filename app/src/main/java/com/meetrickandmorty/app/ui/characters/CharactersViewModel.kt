@@ -1,78 +1,77 @@
 package com.meetrickandmorty.app.ui.characters
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import com.meetrickandmorty.app.utils.InternetUtil
+import com.meetrickandmorty.app.ui.base.BaseViewModel
 import com.meetrickandmorty.domain.model.Character
-import com.meetrickandmorty.domain.model.CharactersPagination
 import com.meetrickandmorty.domain.model.InfoModel
 import com.meetrickandmorty.domain.usecase.GetAllCharactersUseCase
 import com.meetrickandmorty.domain.utils.Constants.EMPTY_STRING
 import kotlinx.coroutines.launch
 
-class CharactersViewModel(private val useCase: GetAllCharactersUseCase) : ViewModel() {
+class CharactersViewModel(
+    data: CharactersData,
+    private val useCase: GetAllCharactersUseCase
+) : BaseViewModel<CharactersData>(data) {
 
-    val showLoading: MutableLiveData<Boolean> = MutableLiveData(false)
-    internal val getCharactersFailure: MutableLiveData<String> = MutableLiveData()
-    internal val charactersResponse: MutableLiveData<CharactersPagination> = MutableLiveData()
+    private var isFilteringCharacters = false
     private val characters: MutableList<Character> = mutableListOf()
 
-    private var nextPage = 1
-
-    private val internetConnectivityObserver = Observer<Boolean> { isConnected ->
-        if (isConnected) {
-            getAllCharacters(nextPage)
-        }
-    }
-
     init {
-        getAllCharacters(nextPage)
+        getAllCharacters()
     }
 
-    private fun getAllCharacters(page: Int) {
+    fun getCharactersLiveData(): LiveData<List<Character>> = data.getCharactersLiveData()
+
+    fun getCharactersFailureLiveData(): LiveData<String> = data.getCharactersFailureLiveData()
+
+    fun getPaginationInfoLiveData(): LiveData<InfoModel> = data.getPaginationInfoLiveData()
+
+    private fun getAllCharacters(page: Int = DEFAULT_PAGE, name: String = EMPTY_STRING) {
         viewModelScope.launch {
-            if (InternetUtil.isInternetConnected()) {
-                showLoading.postValue(true)
-                useCase.getAllCharacters(page).fold(
-                    {
-                        showLoading.postValue(false)
+            data.toggleShowLoading(true)
+            useCase.getAllCharacters(page, name).fold(
+                {
+                    data.toggleShowLoading(false)
+                    if (isFilteringCharacters) {
+                        data.setCharacters(it.characters)
+                    } else {
                         characters.addAll(it.characters)
-                        charactersResponse.postValue(it)
-                    },
-                    {
-                        showLoading.postValue(false)
-                        getCharactersFailure.postValue(it.message)
+                        data.setCharacters(characters)
                     }
-                )
-            } else {
-                getCharactersFailure.postValue(EMPTY_STRING)
-                InternetUtil.observeForever(internetConnectivityObserver)
-            }
+                    data.setPaginationInfo(it.info)
+                },
+                {
+                    data.toggleShowLoading(false)
+                    data.setCharactersFailure(it.message)
+                }
+            )
         }
     }
 
     fun loadNextPage(nextPage: Int, info: InfoModel?) {
-        info?.let {
-            if (nextPage <= it.pages && it.next.isNotEmpty()) {
-                this.nextPage = nextPage
-                showLoading.postValue(true)
+        if (isFilteringCharacters) return
+
+        if (info == null) {
+            getAllCharacters()
+        } else {
+            if (nextPage <= info.pages && info.next.isNotEmpty()) {
                 getAllCharacters(nextPage)
             }
         }
     }
 
-    fun filterCharacters(query: String?): List<Character> {
-        return query?.let {
-            return@let characters.filter {
-                it.name.startsWith(query, ignoreCase = true)
-            }.toList()
-        } ?: characters
+    fun filterCharacters(query: String?) {
+        if (query.isNullOrEmpty()) {
+            isFilteringCharacters = false
+            data.setCharacters(characters)
+        } else {
+            isFilteringCharacters = true
+            getAllCharacters(name = query)
+        }
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        InternetUtil.removeObserver(internetConnectivityObserver)
+    companion object {
+        private const val DEFAULT_PAGE = 1
     }
 }

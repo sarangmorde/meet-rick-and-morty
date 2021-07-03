@@ -13,10 +13,10 @@ class RickAndMortyRemoteSourceImpl(
     private val mapper: CharactersRemoteMapper
 ) : RickAndMortyRemoteSource {
 
-    override suspend fun getAllCharacters(offset: Int): Result<CharactersPagination> {
+    override suspend fun getAllCharacters(offset: Int, name: String): Result<CharactersPagination> {
         return withContext(Dispatchers.IO) {
             try {
-                val response = api.getAllCharacters(offset)
+                val response = api.getAllCharacters(offset, name)
                 val responseBody = response.body()
                 if (response.isSuccessful && responseBody != null) {
                     return@withContext Result.success(

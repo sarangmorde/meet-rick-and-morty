@@ -8,7 +8,7 @@ class GetAllCharactersUseCaseImpl(
     val repository: RickAndMortyRepository
 ) : GetAllCharactersUseCase {
 
-    override suspend fun getAllCharacters(offSet: Int): Result<CharactersPagination> {
-        return repository.getAllCharacters(offSet)
+    override suspend fun getAllCharacters(offSet: Int, name: String): Result<CharactersPagination> {
+        return repository.getAllCharacters(offSet, name)
     }
 }

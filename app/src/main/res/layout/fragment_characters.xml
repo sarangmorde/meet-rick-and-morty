@@ -5,8 +5,8 @@
     <data>
 
         <variable
-            name="viewModel"
-            type="com.meetrickandmorty.app.ui.characters.CharactersViewModel" />
+            name="data"
+            type="com.meetrickandmorty.app.ui.characters.CharactersData" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
@@ -23,14 +23,20 @@
             app:layout_constraintTop_toTopOf="parent"
             app:spanCount="3" />
 
-        <ProgressBar
+        <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/pbLoading"
-            isVisible="@{viewModel.showLoading}"
+            isVisible="@{data.showLoading}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:indeterminate="true"
+            app:indicatorColor="@color/purple_500"
+            app:indicatorDirectionCircular="clockwise"
+            app:indicatorSize="@dimen/characters_progress_bar_size"
+            android:background="@color/black_transparent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:trackColor="@color/white" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

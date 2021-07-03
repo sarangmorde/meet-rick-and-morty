@@ -9,4 +9,6 @@
 
     <!-- Character Details -->
     <dimen name="height_character_details_image">300dp</dimen>
+
+    <dimen name="characters_progress_bar_size">50dp</dimen>
 </resources>

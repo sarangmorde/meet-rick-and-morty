@@ -2,7 +2,7 @@ package com.meetrickandmorty.app
 
 import android.app.Application
 import com.meetrickandmorty.app.di.presentationModule
-import com.meetrickandmorty.app.utils.InternetUtil
+import com.meetrickandmorty.app.utils.NetworkCheck
 import com.meetrickandmorty.data.di.mapperModule
 import com.meetrickandmorty.data.di.networkModule
 import com.meetrickandmorty.data.di.repositoryModule
@@ -15,7 +15,7 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        InternetUtil.init(this)
+        NetworkCheck.init(this)
         startKoin {
             androidContext(this@App)
             modules(

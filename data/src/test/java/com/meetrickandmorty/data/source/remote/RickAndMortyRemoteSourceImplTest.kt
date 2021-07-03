@@ -53,10 +53,10 @@ class RickAndMortyRemoteSourceImplTest {
                 CharacterListMockData.getCharacterList(),
                 CharacterListResponse::class.java
             )
-            whenever(api.getAllCharacters(any())).thenReturn(Response.success(charactersResponse))
+            whenever(api.getAllCharacters(any(), any())).thenReturn(Response.success(charactersResponse))
             whenever(mapper.transform(charactersResponse)).thenReturn(characterPaginationMock)
 
-            val result = remoteSource.getAllCharacters(0)
+            val result = remoteSource.getAllCharacters(0, EMPTY_STRING)
             verify(api).getAllCharacters(0)
             verify(mapper).transform(charactersResponse)
             assertEquals(result.getOrNull(), characterPaginationMock)
@@ -66,9 +66,9 @@ class RickAndMortyRemoteSourceImplTest {
     @Test
     fun getAllCharactersWithFailureTest() {
         runBlocking {
-            whenever(api.getAllCharacters(any())).thenThrow(RuntimeException())
+            whenever(api.getAllCharacters(any(), any())).thenThrow(RuntimeException())
 
-            val result = remoteSource.getAllCharacters(0)
+            val result = remoteSource.getAllCharacters(0, EMPTY_STRING)
             verify(api).getAllCharacters(0)
             verify(mapper, never()).transform(any())
             assertTrue(result.isFailure)

@@ -8,23 +8,22 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.SearchView
+import androidx.core.view.doOnPreDraw
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE
 import androidx.transition.TransitionInflater
 import com.meetrickandmorty.app.BR
-import com.meetrickandmorty.app.ui.MainActivity
 import com.meetrickandmorty.app.R
 import com.meetrickandmorty.app.databinding.FragmentCharactersBinding
 import com.meetrickandmorty.app.databinding.FragmentCharactersBindingImpl
+import com.meetrickandmorty.app.ui.MainActivity
 import com.meetrickandmorty.app.ui.base.BaseFragment
-import com.meetrickandmorty.app.utils.InternetUtil
+import com.meetrickandmorty.app.utils.NetworkCheck
 import com.meetrickandmorty.domain.model.Character
 import com.meetrickandmorty.domain.model.InfoModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.concurrent.TimeUnit
 
 class CharactersFragment : BaseFragment() {
 
@@ -34,8 +33,8 @@ class CharactersFragment : BaseFragment() {
     private var info: InfoModel? = null
 
     private val charactersAdapter: CharactersAdapter =
-        CharactersAdapter { imageView: ImageView, character: Character ->
-            saveScrollPosition()
+        CharactersAdapter { position, imageView, character ->
+            listScrollPosition = position
             isNavigatingBack = true
             (activity as MainActivity).navigateToCharacterDetails(imageView, character)
         }
@@ -55,18 +54,19 @@ class CharactersFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentCharactersBindingImpl.inflate(inflater)
-        binding.apply {
-            lifecycleOwner = this@CharactersFragment.viewLifecycleOwner
-            setVariable(BR.viewModel, this@CharactersFragment.viewModel)
-        }
+        binding.lifecycleOwner = this@CharactersFragment.viewLifecycleOwner
+        viewModel.bindData(binding, BR.data)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        postponeEnterTransition(1, TimeUnit.SECONDS)
+        postponeEnterTransition()
         initRecyclerView()
         subscribeToViewModel()
+        (view.parent as? ViewGroup)?.doOnPreDraw {
+            startPostponedEnterTransition()
+        }
     }
 
     private fun initRecyclerView() {
@@ -89,37 +89,44 @@ class CharactersFragment : BaseFragment() {
     }
 
     private fun subscribeToViewModel() {
-        viewModel.charactersResponse.observe(viewLifecycleOwner, {
+        viewModel.getCharactersLiveData().observe(viewLifecycleOwner, {
             if (isNavigatingBack) {
                 isNavigatingBack = false
                 return@observe
             }
-            info = it.info
-            if (it.info.next.isNotEmpty()) {
-                nextPage = Uri.parse(it.info.next).getQueryParameter(PAGE)?.toInt() ?: 1
-            }
-            charactersAdapter.setCharactersData(it.characters)
+            setCharactersData(it)
         })
 
-        viewModel.getCharactersFailure.observe(viewLifecycleOwner, {
+        viewModel.getPaginationInfoLiveData().observe(viewLifecycleOwner, {
+            info = it
+            if (it.next.isNotEmpty()) {
+                nextPage = Uri.parse(it.next).getQueryParameter(PAGE)?.toInt() ?: 1
+            }
+        })
+
+        viewModel.getCharactersFailureLiveData().observe(viewLifecycleOwner, {
             if (isNavigatingBack) {
                 isNavigatingBack = false
                 return@observe
             }
-            if (!InternetUtil.isInternetConnected()) {
+            if (!NetworkCheck.isInternetConnected()) {
                 showAlertMessage(
                     getString(R.string.lbl_internet_title),
                     getString(R.string.lbl_msg_no_internet_connection)
                 )
             } else {
                 showAlertMessage(getString(R.string.lbl_error_msg), it)
+                NetworkCheck.observeForever { isConnected ->
+                    if (isConnected) {
+                        viewModel.loadNextPage(nextPage, info)
+                    }
+                }
             }
         })
     }
 
-    private fun saveScrollPosition() {
-        val layoutManager = binding.rvCharactersList.layoutManager as GridLayoutManager
-        listScrollPosition = layoutManager.findFirstCompletelyVisibleItemPosition()
+    private fun setCharactersData(characters: List<Character>) {
+        charactersAdapter.setCharactersData(characters)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -130,17 +137,19 @@ class CharactersFragment : BaseFragment() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 searchView.clearFocus()
+                viewModel.filterCharacters(query)
                 return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                charactersAdapter.setCharactersData(
-                    viewModel.filterCharacters(newText),
-                    isFiltered = true
-                )
                 return false
             }
         })
+        searchView.setOnCloseListener {
+            charactersAdapter.clearData()
+            viewModel.filterCharacters(null)
+            return@setOnCloseListener false
+        }
     }
 
     companion object {

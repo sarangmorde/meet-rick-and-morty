@@ -71,12 +71,13 @@ dependencies {
     testImplementation testDependencies.mockitoKotlin
     testImplementation testDependencies.archCoreTesting
     testImplementation testDependencies.coroutineTest
+    testImplementation testDependencies.robolectricMain
+    testImplementation androidTestDependencies.junitExtKtx
+    testImplementation androidTestDependencies.robolectric
+    testImplementation androidTestDependencies.testRunner
+    testImplementation androidTestDependencies.rules
+    testImplementation androidTestDependencies.junitExt
+    testImplementation androidTestDependencies.espresso
 
-    androidTestImplementation androidTestDependencies.junitExtKtx
-    androidTestImplementation androidTestDependencies.robolectric
-    androidTestImplementation androidTestDependencies.testRunner
-    androidTestImplementation androidTestDependencies.rules
-    androidTestImplementation androidTestDependencies.junitExt
-    androidTestImplementation androidTestDependencies.espresso
     androidTestImplementation androidTestDependencies.espressoCore
 }
