@@ -21,7 +21,6 @@ import com.meetrickandmorty.app.databinding.FragmentCharactersBindingImpl
 import com.meetrickandmorty.app.ui.MainActivity
 import com.meetrickandmorty.app.ui.base.BaseFragment
 import com.meetrickandmorty.app.utils.NetworkCheck
-import com.meetrickandmorty.domain.model.Character
 import com.meetrickandmorty.domain.model.InfoModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -90,21 +89,30 @@ class CharactersFragment : BaseFragment() {
     }
 
     private fun subscribeToViewModel() {
+        subscribeToCharactersData()
+        subscribeToPaginationInfo()
+        subscribeToCharactersFailure()
+    }
+
+    private fun subscribeToCharactersData() {
         viewModel.getCharactersLiveData().observe(viewLifecycleOwner, {
             if (isNavigatingBack) {
-                isNavigatingBack = false
                 return@observe
             }
-            setCharactersData(it)
+            charactersAdapter.setCharactersData(it, isFilteringCharacters)
         })
+    }
 
+    private fun subscribeToPaginationInfo() {
         viewModel.getPaginationInfoLiveData().observe(viewLifecycleOwner, {
             info = it
             if (it.next.isNotEmpty()) {
                 nextPage = Uri.parse(it.next).getQueryParameter(PAGE)?.toInt() ?: 1
             }
         })
+    }
 
+    private fun subscribeToCharactersFailure() {
         viewModel.getCharactersFailureLiveData().observe(viewLifecycleOwner, {
             if (isNavigatingBack) {
                 isNavigatingBack = false
@@ -115,19 +123,15 @@ class CharactersFragment : BaseFragment() {
                     getString(R.string.lbl_internet_title),
                     getString(R.string.lbl_msg_no_internet_connection)
                 )
-            } else {
-                showAlertMessage(getString(R.string.lbl_error_msg), it)
                 NetworkCheck.observeForever { isConnected ->
                     if (isConnected) {
                         viewModel.loadNextPage(nextPage, info)
                     }
                 }
+            } else {
+                showAlertMessage(getString(R.string.lbl_error_msg), it)
             }
         })
-    }
-
-    private fun setCharactersData(characters: List<Character>) {
-        charactersAdapter.setCharactersData(characters, isFilteringCharacters)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -148,6 +152,7 @@ class CharactersFragment : BaseFragment() {
             }
         })
         searchView.setOnCloseListener {
+            isNavigatingBack = false
             isFilteringCharacters = false
             charactersAdapter.clearData()
             viewModel.filterCharacters(null)

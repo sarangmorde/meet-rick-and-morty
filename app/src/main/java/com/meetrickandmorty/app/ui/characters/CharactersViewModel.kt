@@ -21,11 +21,12 @@ class CharactersViewModel(
         getAllCharacters()
     }
 
-    fun getCharactersLiveData(): LiveData<List<Character>> = data.getCharactersLiveData()
+    internal fun getCharactersLiveData(): LiveData<List<Character>> = data.getCharactersLiveData()
 
-    fun getCharactersFailureLiveData(): LiveData<String> = data.getCharactersFailureLiveData()
+    internal fun getCharactersFailureLiveData(): LiveData<String> =
+        data.getCharactersFailureLiveData()
 
-    fun getPaginationInfoLiveData(): LiveData<InfoModel> = data.getPaginationInfoLiveData()
+    internal fun getPaginationInfoLiveData(): LiveData<InfoModel> = data.getPaginationInfoLiveData()
 
     private fun getAllCharacters(page: Int = DEFAULT_PAGE, name: String = EMPTY_STRING) {
         viewModelScope.launch {
@@ -49,7 +50,7 @@ class CharactersViewModel(
         }
     }
 
-    fun loadNextPage(nextPage: Int, info: InfoModel?) {
+    internal fun loadNextPage(nextPage: Int, info: InfoModel?) {
         if (isFilteringCharacters) return
 
         if (info == null) {
@@ -61,7 +62,7 @@ class CharactersViewModel(
         }
     }
 
-    fun filterCharacters(query: String?) {
+    internal fun filterCharacters(query: String?) {
         if (query.isNullOrEmpty()) {
             isFilteringCharacters = false
             data.setCharacters(characters)

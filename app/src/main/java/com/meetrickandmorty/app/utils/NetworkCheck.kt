@@ -16,11 +16,11 @@ object NetworkCheck : LiveData<Boolean>() {
 
     private val networkCallback = object : NetworkCallback() {
         override fun onAvailable(network: Network) {
-            value = true
+            postValue(true)
         }
 
         override fun onLost(network: Network) {
-            value = false
+            postValue(false)
         }
     }
 

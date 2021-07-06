@@ -3,6 +3,7 @@ package com.meetrickandmorty.app
 import android.app.Application
 import com.meetrickandmorty.app.di.presentationModule
 import com.meetrickandmorty.app.utils.NetworkCheck
+import com.meetrickandmorty.data.di.databaseModule
 import com.meetrickandmorty.data.di.mapperModule
 import com.meetrickandmorty.data.di.networkModule
 import com.meetrickandmorty.data.di.repositoryModule
@@ -25,7 +26,8 @@ class App : Application() {
                     repositoryModule,
                     sourceModule,
                     mapperModule,
-                    networkModule
+                    networkModule,
+                    databaseModule
                 )
             )
         }
